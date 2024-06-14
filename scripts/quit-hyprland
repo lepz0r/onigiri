@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Define the options
+options=("Yes" "No")
+
+# Prompt the user using dmenu
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Are you sure you wan't to quit Hyprland?: ")
+
+# Handle the choice
+case "$choice" in
+    "Yes")
+        hyprctl dispatch exit
+        ;;
+    "No")
+        echo "You selected No."
+        ;;
+    *)
+        echo "Invalid choice."
+        ;;
+esac
