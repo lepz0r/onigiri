@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+if [ x"$@" != x"" ]
+then
+    coproc ( $ROFI_INFO > /dev/null )
+    exit 0
+fi
+
+echo -en "\0prompt\x1f  \n"
+echo -en "\0markup-rows\x1ftrue\n"
+
+IFS=$'\n'
+keybinds=($(hyprctl -j binds | jq '.[] | select (.description!="") | .dispatcher,  .arg , .modmask, .key ,.description'))
+current_array=0
+
+convert_keycode () {
+  case "$1" in
+    "1")
+      echo "Shift-"
+      ;;
+    "4")
+      echo "Ctrl-"
+      ;;
+    "8")
+      echo "Alt-"
+      ;;
+    "64")
+      echo "Super-"
+      ;;
+    "65")
+      echo "Super-Shift-"
+      ;;
+    "68")
+      echo "Super-Ctrl-"
+      ;;
+    "72")
+      echo "Super-Alt-"
+      ;;
+  esac
+}
+
+while (( $current_array < ${#keybinds[@]} )); do
+  dispatcher_element=$(echo ${keybinds[$current_array]} | tr -d '"')
+  argument_element=$(echo ${keybinds[$((current_array+1))]} | tr -d '"')
+  modmask_element=$(convert_keycode $(echo ${keybinds[$((current_array+2))]} | tr -d '"'))
+  key_element=$(echo ${keybinds[$((current_array+3))]} | tr -d '"')
+  desc_element=$(echo ${keybinds[$((current_array+4))]} | tr -d '"')
+
+  if [[ $dispatcher_element != "exec" ]]; then
+      command="hyprctl dispatch $dispatcher_element $argument_element" 
+  else
+      command="$argument_element"
+  fi
+
+  echo -en "$desc_element <i><span size=\"smaller\">($modmask_element$key_element)</span></i>\0info\x1f$command \n"
+
+  current_array=$(($current_array+5))
+done
+
