@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-if [ x"$@" != x"" ]
+if [ x"$@" != x"" ] && [ "$1" != "-g" ];
 then
     coproc ( $ROFI_INFO > /dev/null )
     exit 0
 fi
 
-echo -en "\0prompt\x1f  \n"
-echo -en "\0markup-rows\x1ftrue\n"
+CACHE_FILE="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/cp-cache"
+
 
 IFS=$'\n'
 keybinds=($(hyprctl -j binds | jq '.[] | select (.description!="") | .dispatcher,  .arg , .modmask, .key ,.description'))
@@ -39,6 +39,10 @@ convert_keycode () {
   esac
 }
 
+generate_hyprland_commands () {
+echo -en "\0prompt\x1f  \n" 
+echo -en "\0markup-rows\x1ftrue\n"
+
 while (( $current_array < ${#keybinds[@]} )); do
   dispatcher_element=$(echo ${keybinds[$current_array]} | tr -d '"')
   argument_element=$(echo ${keybinds[$((current_array+1))]} | tr -d '"')
@@ -49,11 +53,21 @@ while (( $current_array < ${#keybinds[@]} )); do
   if [[ $dispatcher_element != "exec" ]]; then
       command="hyprctl dispatch $dispatcher_element $argument_element" 
   else
-      command="$argument_element"
+      command="eval $argument_element"
   fi
 
   echo -en "$desc_element <i><span size=\"smaller\">($modmask_element$key_element)</span></i>\0info\x1f$command \n"
 
   current_array=$(($current_array+5))
 done
+}
 
+if [[ "$1" == "-g" ]]; then
+  generate_hyprland_commands > "$CACHE_FILE"
+else
+  if [[ -a $CACHE_FILE ]]; then
+    cat $CACHE_FILE
+  else
+    generate_hyprland_commands 
+  fi
+fi
