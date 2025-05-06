@@ -39,6 +39,25 @@ convert_keycode () {
   esac
 }
 
+replace_key () {
+  case "$1" in
+    "left")
+      echo ""
+      ;;
+    "down")
+      echo ""
+      ;;
+    "up")
+      echo ""
+      ;;
+    "right")
+      echo ""
+      ;;
+    *)
+      echo "${1^}"
+  esac
+}
+
 generate_hyprland_commands () {
 echo -en "\0prompt\x1f  \n" 
 echo -en "\0markup-rows\x1ftrue\n"
@@ -47,8 +66,29 @@ while (( $current_array < ${#keybinds[@]} )); do
   dispatcher_element=$(echo ${keybinds[$current_array]} | tr -d '"')
   argument_element=$(echo ${keybinds[$((current_array+1))]} | tr -d '"')
   modmask_element=$(convert_keycode $(echo ${keybinds[$((current_array+2))]} | tr -d '"'))
-  key_element=$(echo ${keybinds[$((current_array+3))]} | tr -d '"')
+  key_element=$(replace_key $(echo ${keybinds[$((current_array+3))]} | tr -d '"'))
   desc_element=$(echo ${keybinds[$((current_array+4))]} | tr -d '"')
+
+  next_keybind=5
+
+  dispatcher_element_next=$(echo ${keybinds[$(($current_array+$next_keybind))]} | tr -d '"')
+  argument_element_next=$(echo ${keybinds[$((current_array+$next_keybind+1))]} | tr -d '"')
+  modmask_element_next=$(convert_keycode $(echo ${keybinds[$((current_array+$next_keybind+2))]} | tr -d '"'))
+  key_element_next=$(replace_key $(echo ${keybinds[$((current_array+$next_keybind+3))]} | tr -d '"'))
+  desc_element_next=$(echo ${keybinds[$((current_array+$next_keybind+4))]} | tr -d '"')
+  entry_keybind="$modmask_element$key_element"
+
+  while [[ "$dispatcher_element" == "$dispatcher_element_next" ]] && [[ "$argument_element" && "$argument_element_next" ]] && [[ "$desc_element" == "$desc_element_next" ]]; do
+      entry_keybind="$entry_keybind $modmask_element_next$key_element_next"
+      next_keybind=$next_keybind+5
+
+      dispatcher_element_next=$(echo ${keybinds[$(($current_array+$next_keybind))]} | tr -d '"')
+      argument_element_next=$(echo ${keybinds[$((current_array+$next_keybind+1))]} | tr -d '"')
+      modmask_element_next=$(convert_keycode $(echo ${keybinds[$((current_array+$next_keybind+2))]} | tr -d '"'))
+      key_element_next=$(replace_key $(echo ${keybinds[$((current_array+$next_keybind+3))]} | tr -d '"'))
+      desc_element_next=$(echo ${keybinds[$((current_array+$next_keybind+4))]} | tr -d '"')
+
+  done
 
   if [[ $dispatcher_element != "exec" ]]; then
       command="hyprctl dispatch $dispatcher_element $argument_element" 
@@ -56,13 +96,14 @@ while (( $current_array < ${#keybinds[@]} )); do
       command="eval $argument_element"
   fi
 
-  echo -en "$desc_element <i><span size=\"smaller\">($modmask_element$key_element)</span></i>\0info\x1f$command \n"
+  echo -en "$desc_element <span style=\"italic\" size=\"smaller\">($entry_keybind)</span>\0info\x1f$command \n"
 
-  current_array=$(($current_array+5))
+  current_array=$(($current_array+$next_keybind))
 done
 }
 
 if [[ "$1" == "-g" ]]; then
+  #generate_hyprland_commands > "$CACHE_FILE"
   generate_hyprland_commands > "$CACHE_FILE"
 else
   if [[ -a $CACHE_FILE ]]; then
