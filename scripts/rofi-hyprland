@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ x"$@" != x"" ] && [ "$1" != "-g" ];
+if [ "$ROFI_INFO" != "" ];
 then
     coproc ( $ROFI_INFO > /dev/null )
     exit 0
@@ -12,6 +12,7 @@ CACHE_FILE="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/cp-cache"
 IFS=$'\n'
 keybinds=($(hyprctl -j binds | jq '.[] | select (.description!="") | .dispatcher,  .arg , .modmask, .key ,.description'))
 current_array=0
+read_cache=1
 
 convert_keycode () {
   case "$1" in
@@ -102,13 +103,48 @@ while (( $current_array < ${#keybinds[@]} )); do
 done
 }
 
-if [[ "$1" == "-g" ]]; then
+
+while [ -n "$1" ]; do
+	case "$1" in
+    -g)
+      generate=1
+      ;;
+    -n)
+      read_cache=0
+      ;;
+    *)
+      custom_command_json="$(eval echo $1)"
+  esac
+  shift
+done
+
+if [[ $generate == 1 ]]; then
   #generate_hyprland_commands > "$CACHE_FILE"
   generate_hyprland_commands > "$CACHE_FILE"
 else
-  if [[ -a $CACHE_FILE ]]; then
+  if [[ -a $CACHE_FILE ]] && [[ $read_cache == 1 ]]; then
     cat $CACHE_FILE
   else
     generate_hyprland_commands 
   fi
+fi
+
+if [[ -n $custom_command_json ]]; then
+  custom_commands=($(jq -r '.[] | .dispatcher, .arg, .description' $custom_command_json))
+
+  current_array=0
+  while (( $current_array < ${#custom_command_json[@]} )); do
+  dispatcher_element=$(echo ${custom_commands[$current_array]})
+  argument_element=$(echo ${custom_commands[$((current_array+1))]})
+  desc_element=$(echo ${custom_commands[$((current_array+2))]})
+
+  if [[ $dispatcher_element != "exec" ]]; then
+      command="hyprctl dispatch $dispatcher_element $argument_element" 
+  else
+      command="eval $argument_element"
+  fi
+
+  echo -en "$desc_element \0info\x1f$command \n"
+  current_array=$(($current_array+3))
+  done
 fi

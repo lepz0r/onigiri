@@ -1,0 +1,7 @@
+[
+  {
+    "description": "Connect WiFi",
+    "dispatcher": "exec",
+    "arg": "rofi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\""
+  }
+]

@@ -1,0 +1,73 @@
+IFS=$'\n'
+#wifi_list=($(nmcli -t device wifi list | sed 's/\(^\|[^\\]\):/\1\n''/g'))
+set -f
+wifi_list=($(nmcli --get-values SIGNAL,SSID,SECURITY,IN-USE device wifi list))
+
+scan () {
+current_array=0
+
+while (( $current_array < ${#wifi_list[@]} )); do
+IFS=$':'
+current_ssid=(${wifi_list[$current_array]})
+signal_value="${current_ssid[0]}"
+security_value="${current_ssid[2]}"
+ssid="${current_ssid[1]}"
+info="$ssid"
+
+if (( $signal_value>=90 )); then
+  signal="󰤨"
+elif (( $signal_value<=89 && $signal_value>=65 ));then
+  signal="󰤥"
+elif (( $signal_value<=64 && $signal_value>=40 ));then
+  signal="󰤢"
+elif (( $signal_value<=39 ));then
+  signal="󰤟"
+fi
+
+if [[ $security_value == *"WPA"* ]] || [[ $security_value == *"WEP"* ]]; then
+  security="󰌾"
+  info="$info⌘1⌘0"
+else
+  security=""
+  info="$info⌘0⌘0"
+fi
+
+if [[ ${current_ssid[3]} == '*' ]]; then
+  bold_start="<span weight=\"heavy\">"
+  bold_end="</span> ●"
+else
+  unset bold_start
+  unset bold_end
+fi
+
+echo -en "\0prompt\x1fConnect To WiFi \n" 
+echo -en "\0markup-rows\x1ftrue\n"
+
+echo -en "$bold_start$signal   $ssid $security$bold_end\0info\x1f$info\n"
+current_array=$(($current_array+1))
+done
+echo -en "Connect to hidden network\0info\x1fhidden⌘0⌘1\n"
+#echo -en "Rescan network\0info\x1fhidden⌘0⌘2\n"
+}
+
+
+if [ x"$@" != x"" ];
+then
+  IFS=$'⌘'
+  info2=($ROFI_INFO)
+  if [ ${info2[2]} == 1 ]; then
+      coproc ( sleep 0.1 && ssid=$(rofi -dmenu -window-title "Enter SSID name " -theme-str 'window  { children:   [ inputbar ];} entry { placeholder: "Password";}') && export ssid_pass=$(rofi -dmenu -password -window-title "Enter password for $ssid " -theme-str 'window  { children:   [ inputbar ];} entry { placeholder: "Password";}') && nmcli dev wifi connect "$ssid" password "$ssid_pass" hidden yes )
+      exit 0
+  elif [ ${info2[2]} == 0 ]; then
+    if [ ${info2[1]} == "1" ]; then
+      coproc ( sleep 0.1 && ssid_pass=$(rofi -dmenu -password -window-title "Enter password for ${info2[0]} " -theme-str 'window  { children:   [ inputbar ];} entry { placeholder: "Password";}') && nmcli dev wifi connect ${info2[0]} password $ssid_pass )
+    else
+      coproc (  nmcli dev wifi connect ${info2[0]} )
+    fi
+    exit 0
+  else
+    nmcli dev wifi rescan
+    scan
+  fi
+fi
+scan
