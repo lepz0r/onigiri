@@ -10,7 +10,8 @@ CACHE_FILE="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/cp-cache"
 
 
 IFS=$'\n'
-keybinds=($(hyprctl -j binds | jq '.[] | select (.description!="") | .dispatcher,  .arg , .modmask, .key ,.description'))
+#keybinds=($(hyprctl -j binds | jq  -r '.[] | select (.description!="") | .dispatcher,  .arg , .modmask, .key ,.description'))
+mapfile -t keybinds < <(hyprctl -j binds | jq -r '.[] | select(.description != "") | .dispatcher, .arg, .modmask, .key, .description')
 current_array=0
 read_cache=1
 
@@ -64,11 +65,11 @@ echo -en "\0prompt\x1f  \n"
 echo -en "\0markup-rows\x1ftrue\n"
 
 while (( $current_array < ${#keybinds[@]} )); do
-  dispatcher_element=$(echo ${keybinds[$current_array]} | tr -d '"')
-  argument_element=$(echo ${keybinds[$((current_array+1))]} | tr -d '"')
-  modmask_element=$(convert_keycode $(echo ${keybinds[$((current_array+2))]} | tr -d '"'))
-  key_element=$(replace_key $(echo ${keybinds[$((current_array+3))]} | tr -d '"'))
-  desc_element=$(echo ${keybinds[$((current_array+4))]} | tr -d '"')
+  dispatcher_element=$(echo ${keybinds[$current_array]})
+  argument_element=$(echo ${keybinds[$((current_array+1))]})
+  modmask_element=$(convert_keycode $(echo ${keybinds[$((current_array+2))]}))
+  key_element=$(replace_key $(echo ${keybinds[$((current_array+3))]}))
+  desc_element=$(echo ${keybinds[$((current_array+4))]})
 
   next_keybind=5
 
@@ -130,7 +131,7 @@ else
 fi
 
 if [[ -n $custom_command_json ]]; then
-  custom_commands=($(jq -r '.[] | .dispatcher, .arg, .description' $custom_command_json))
+  mapfile -t custom_commands < <(jq -r '.[] | .dispatcher, .arg, .description' $custom_command_json)
 
   current_array=0
   while (( $current_array < ${#custom_command_json[@]} )); do
