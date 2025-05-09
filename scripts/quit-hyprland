@@ -1,18 +1,24 @@
 #!/bin/bash
 
 # Define the options
-options=("Yes" "No")
+options=("Logout/Exit Hyprland" "Suspend" "Power off" "Reboot")
 
 # Prompt the user using dmenu
-choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Are you sure you wan't to quit Hyprland?: ")
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Power menu ")
 
 # Handle the choice
 case "$choice" in
-    "Yes")
+    "Logut/Exit Hyprland")
         hyprctl dispatch exit
         ;;
-    "No")
-        echo "You selected No."
+    "Power off")
+        dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 "org.freedesktop.login1.Manager.PowerOff" boolean:true
+        ;;
+    "Reboot")
+        dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 "org.freedesktop.login1.Manager.Reboot" boolean:true
+        ;;
+    "Suspend")
+        dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 "org.freedesktop.login1.Manager.Suspend" boolean:true
         ;;
     *)
         echo "Invalid choice."
