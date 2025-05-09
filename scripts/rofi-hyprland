@@ -98,7 +98,12 @@ while (( $current_array < ${#keybinds[@]} )); do
       command="eval $argument_element"
   fi
 
+  if [[ "$desc_element" == *"\0"* ]]; then
+    display="$(echo -ne $desc_element | sed "s/\x00.*\x1f.*//g")"
+    echo -en "$desc_element\x1fdisplay\x1f$display <span style=\"italic\" size=\"smaller\">($entry_keybind)</span>\x1finfo\x1f$command \n"
+  else
   echo -en "$desc_element <span style=\"italic\" size=\"smaller\">($entry_keybind)</span>\0info\x1f$command \n"
+  fi
 
   current_array=$(($current_array+$next_keybind))
 done
