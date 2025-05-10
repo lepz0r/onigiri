@@ -1,3 +1,6 @@
 [submodule "waybar"]
 	path = waybar
 	url = https://gitlab.com/lepz0r/owlphin
+[submodule "colorschemes/catppuccin"]
+	path = colorschemes/catppuccin
+	url = https://github.com/catppuccin/hyprland
