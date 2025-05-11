@@ -8,7 +8,7 @@ choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Power menu ")
 
 # Handle the choice
 case "$choice" in
-    "Logut/Exit Hyprland")
+    "Logout/Exit Hyprland")
         hyprctl dispatch exit
         ;;
     "Power off")
