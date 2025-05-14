@@ -1,0 +1,11 @@
+#!/bin/sh
+
+layout=$(jq -r '.[] | .layout' ~/.config/hypr/onigiri.json)
+colorscheme=$(jq -r '.[] | .colorscheme' ~/.config/hypr/onigiri.json)
+
+if [[ $layout == master ]]; then
+  layout="master-xmonad-like-keybindings"
+fi
+
+echo "source = ../colorschemes/$colorscheme.conf" > ~/.config/hypr/conf/onigiri.conf
+echo "source = $layout.conf" >> ~/.config/hypr/conf/onigiri.conf
