@@ -486,7 +486,7 @@ print_custom_binds(bindds_top)
 print_action("Close active window", killactive_keybind, "killactive")
 if layout == "master":
     print_action("Focus next window", cyclenext_keybind, "layoutmsg cyclenext")
-    print_action("Focus previous window", cyclenext_keybind, "layoutmsg cycleprev")
+    print_action("Focus previous window", cycleprev_keybind, "layoutmsg cycleprev")
     print_action(
         "Grow master window",
         mfact_grow_keybind,
@@ -494,7 +494,7 @@ if layout == "master":
     )
     print_action(
         "Shrink master window",
-        mfact_grow_keybind,
+        mfact_shrink_keybind,
         "layoutmsg mfact " + mfact_shrink_value,
     )
     print_action("Focus master", focusmaster_keybind, "layoutmsg focusmaster")
@@ -577,7 +577,7 @@ if layout == "master":
 
     print_action(
         "Cycle orientation (" + orientation_rotation + ")",
-        swapwithmaster_keybind,
+        orientationcycle_keybind,
         "layoutmsg orientationcycle " + orientation_rotation,
     )
 
