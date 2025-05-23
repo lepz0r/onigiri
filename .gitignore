@@ -1,2 +1,3 @@
 hyprland.conf.d/*
 !hyprland.conf.d/put-your-config-here.conf
+autoexec.conf
