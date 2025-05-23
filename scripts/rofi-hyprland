@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 if [ "$ROFI_INFO" != "" ];
 then
-    coproc ( $ROFI_INFO > /dev/null )
+    coproc ( eval $ROFI_INFO > /dev/null )
     exit 0
 fi
 

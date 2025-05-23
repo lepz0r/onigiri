@@ -129,6 +129,11 @@ def print_action(description, keybind, command, before_after):
     if len(keybind) > 0:
         keybind = ' <span style="italic" size="smaller">(' + keybind + ")</span>"
 
+    if command.split()[0] == "exec":
+        command_output = command.partition(" ")[2]
+    else:
+        command_output = "hyprctl dispatch " + command
+
     if before_after:
         bindds_before = []
         bindds_after = []
@@ -140,10 +145,10 @@ def print_action(description, keybind, command, before_after):
             if current_keybind["after"] == command:
                 bindds_after.append(current_keybind)
         print_custom_binds(bindds_before)
-        print(description + keybind + "\0info\x1f" + "hyprctl dispatch " + command)
+        print(description + keybind + "\0info\x1f" + command_output)
         print_custom_binds(bindds_after)
     else:
-        print(description + keybind + "\0info\x1f" + "hyprctl dispatch " + command)
+        print(description + keybind + "\0info\x1f" + command_output)
 
 
 ### Generate keybind entry
@@ -505,6 +510,32 @@ for current_keybind in bindds:
 print_custom_binds(bindds_top)
 
 print_action("Close active window", killactive_keybind, "killactive", True)
+
+print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
+
+print_action(
+    "Toggle active window fullscreen", fullscreen_keybind, "fullscreen 0", True
+)
+
+# Workspace related entries goes here
+
+for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
+    print_action(
+        "Switch to workspace " + current_workspace["name"],
+        current_workspace["switchtokeybind"],
+        "workspace " + str(current_workspace["id"]),
+        True,
+    )
+
+for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
+    print_action(
+        "Move to workspace " + current_workspace["name"],
+        current_workspace["movetosilentkeybind"],
+        "workspace " + str(current_workspace["id"]),
+        True,
+    )
+
+
 if layout == "master":
     print_action("Focus next window", cyclenext_keybind, "layoutmsg cyclenext", True)
     print_action(
@@ -565,11 +596,6 @@ print_action(
     True,
 )
 
-print_action(
-    "Toggle active window fullscreen", fullscreen_keybind, "fullscreen 0", True
-)
-
-print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
 
 print_action("Pin active window", pin_keybind, "pin", True)
 
@@ -607,22 +633,5 @@ print_action("Move window down", movewindow_d_keybind, "movewindow d", True)
 print_action("Move window up", movewindow_u_keybind, "movewindow u", True)
 print_action("Move window right", movewindow_r_keybind, "movewindow r", True)
 
-## workspace related entries goes here
-
-for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
-    print_action(
-        "Switch to workspace " + current_workspace["name"],
-        current_workspace["switchtokeybind"],
-        "workspace " + str(current_workspace["id"]),
-        True,
-    )
-
-for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
-    print_action(
-        "Move to workspace " + current_workspace["name"],
-        current_workspace["movetosilentkeybind"],
-        "workspace " + str(current_workspace["id"]),
-        True,
-    )
 
 print_custom_binds(bindds_bottom)
