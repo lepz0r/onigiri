@@ -17,7 +17,7 @@ echo "exec-once=hypridle" > "$autoexec_file"
 hyprland_reload=1
 fi
 
-if [ hyprland_reload -eq 1 ]
+if [ $hyprland_reload -eq 1 ]
 then
 hyprctl reload
 fi
