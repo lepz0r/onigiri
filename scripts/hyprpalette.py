@@ -529,9 +529,9 @@ for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
 
 for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
     print_action(
-        "Move to workspace " + current_workspace["name"],
+        "Move active window to workspace " + current_workspace["name"],
         current_workspace["movetosilentkeybind"],
-        "workspace " + str(current_workspace["id"]),
+        "movetoworkspacesilent " + str(current_workspace["id"]),
         True,
     )
 
