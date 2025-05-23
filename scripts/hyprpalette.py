@@ -89,13 +89,6 @@ def add_keybind(current_keybind, modmask, key):
     return output_keybind
 
 
-def print_action(description, keybind, command):
-    if len(keybind) > 0:
-        keybind = ' <span style="italic" size="smaller">(' + keybind + ")</span>"
-    # dispatcher = command.split()[0]
-    print(description + keybind + "\0info\x1f" + "hyprctl dispatch " + command)
-
-
 def print_custom_binds(list):
     list_index = 0
     dupes = []
@@ -128,8 +121,29 @@ def print_custom_binds(list):
                         dupes.append(dupe_finder_list_index)
                 dupe_finder_list_index = dupe_finder_list_index + 1
 
-            print_action(description, keybind, dispatcher + " " + arg)
+            print_action(description, keybind, dispatcher + " " + arg, False)
         list_index = list_index + 1
+
+
+def print_action(description, keybind, command, before_after):
+    if len(keybind) > 0:
+        keybind = ' <span style="italic" size="smaller">(' + keybind + ")</span>"
+
+    if before_after:
+        bindds_before = []
+        bindds_after = []
+        for current_keybind in bindds:
+            if current_keybind["before"] == command:
+                bindds_before.append(current_keybind)
+
+        for current_keybind in bindds:
+            if current_keybind["after"] == command:
+                bindds_after.append(current_keybind)
+        print_custom_binds(bindds_before)
+        print(description + keybind + "\0info\x1f" + "hyprctl dispatch " + command)
+        print_custom_binds(bindds_after)
+    else:
+        print(description + keybind + "\0info\x1f" + "hyprctl dispatch " + command)
 
 
 ### Generate keybind entry
@@ -470,7 +484,14 @@ for current_workspace in workspaces:
 bindds_top = []
 for current_keybind in bindds:
     if current_keybind["position"] in ("top", "beginning", "begin", ""):
-        bindds_top.append(current_keybind)
+        if (
+            current_keybind["position"] == ""
+            and current_keybind["before"] == ""
+            and current_keybind["after"] == ""
+        ):
+            bindds_top.append(current_keybind)
+        elif current_keybind["position"] in ("top", "beginning", "begin"):
+            bindds_top.append(current_keybind)
 
 bindds_bottom = []
 for current_keybind in bindds:
@@ -483,120 +504,108 @@ for current_keybind in bindds:
 ## Print custom keybindings that has description
 print_custom_binds(bindds_top)
 
-print_action("Close active window", killactive_keybind, "killactive")
+print_action("Close active window", killactive_keybind, "killactive", True)
 if layout == "master":
-    print_action("Focus next window", cyclenext_keybind, "layoutmsg cyclenext")
-    print_action("Focus previous window", cycleprev_keybind, "layoutmsg cycleprev")
+    print_action("Focus next window", cyclenext_keybind, "layoutmsg cyclenext", True)
+    print_action(
+        "Focus previous window", cycleprev_keybind, "layoutmsg cycleprev", True
+    )
     print_action(
         "Grow master window",
         mfact_grow_keybind,
         "layoutmsg mfact " + mfact_grow_value,
+        True,
     )
     print_action(
         "Shrink master window",
         mfact_shrink_keybind,
         "layoutmsg mfact " + mfact_shrink_value,
+        True,
     )
-    print_action("Focus master", focusmaster_keybind, "layoutmsg focusmaster")
+    print_action("Focus master", focusmaster_keybind, "layoutmsg focusmaster", True)
 
 
-print_action("Focus left window", movefocus_l_keybind, "movefocus l")
-print_action("Focus down window", movefocus_d_keybind, "movefocus d")
-print_action("Focus up window", movefocus_u_keybind, "movefocus u")
-print_action("Focus right window", movefocus_r_keybind, "movefocus r")
+print_action("Focus left window", movefocus_l_keybind, "movefocus l", True)
+print_action("Focus down window", movefocus_d_keybind, "movefocus d", True)
+print_action("Focus up window", movefocus_u_keybind, "movefocus u", True)
+print_action("Focus right window", movefocus_r_keybind, "movefocus r", True)
 
 print_action(
-    "Toggle focused window floating",
-    togglefloating_keybind,
-    "togglefloating",
+    "Toggle focused window floating", togglefloating_keybind, "togglefloating", True
 )
 if layout == "dwindle":
-    print_action("Toggle pseudotiling", pseudo_keybind, "pseudo")
-    print_action("Toggle split", togglesplit_keybind, "togglesplit")
+    print_action("Toggle pseudotiling", pseudo_keybind, "pseudo", True)
+    print_action("Toggle split", togglesplit_keybind, "togglesplit", True)
 
 print_action(
     "Grow active window horizontally",
     h_grow_keybind,
     "resizeactive " + h_grow_value + " 0",
+    True,
 )
 
 print_action(
     "Shrink active window horizontally",
     h_shrink_keybind,
     "resizeactive " + h_shrink_value + " 0",
+    True,
 )
 
 print_action(
     "Grow active window vertically",
     v_grow_keybind,
     "resizeactive " + "0 " + v_grow_value,
+    True,
 )
 
 print_action(
     "Shrink active window vertically",
     v_shrink_keybind,
     "resizeactive " + "0 " + v_shrink_value,
+    True,
 )
 
 print_action(
-    "Toggle active window fullscreen",
-    fullscreen_keybind,
-    "fullscreen 0",
+    "Toggle active window fullscreen", fullscreen_keybind, "fullscreen 0", True
 )
 
-print_action(
-    "Maximize active window",
-    maximize_keybind,
-    "fullscreen 1",
-)
+print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
 
-print_action(
-    "Pin active window",
-    pin_keybind,
-    "pin",
-)
+print_action("Pin active window", pin_keybind, "pin", True)
 
 if layout == "master":
     print_action(
-        "Swap with previous window",
-        swapprev_keybind,
-        "layoutmsg swapprev",
+        "Swap with previous window", swapprev_keybind, "layoutmsg swapprev", True
     )
 
-    print_action(
-        "Swap with next window",
-        swapnext_keybind,
-        "layoutmsg swapnext",
-    )
+    print_action("Swap with next window", swapnext_keybind, "layoutmsg swapnext", True)
 
     print_action(
-        "Swap with master",
-        swapwithmaster_keybind,
-        "layoutmsg swapwithmaster",
+        "Swap with master", swapwithmaster_keybind, "layoutmsg swapwithmaster", True
     )
 
     print_action(
         "Cycle orientation (" + orientation_rotation + ")",
         orientationcycle_keybind,
         "layoutmsg orientationcycle " + orientation_rotation,
+        True,
     )
 
     print_action(
-        "Add active window to master",
-        addmaster_keybind,
-        "layoutmsg addmaster",
+        "Add active window to master", addmaster_keybind, "layoutmsg addmaster", True
     )
 
     print_action(
         "Remove active window from master",
         removemaster_keybind,
         "layoutmsg removemaster",
+        True,
     )
 
-print_action("Move window left", movewindow_l_keybind, "movewindow l")
-print_action("Move window down", movewindow_d_keybind, "movewindow d")
-print_action("Move window up", movewindow_u_keybind, "movewindow u")
-print_action("Move window right", movewindow_r_keybind, "movewindow r")
+print_action("Move window left", movewindow_l_keybind, "movewindow l", True)
+print_action("Move window down", movewindow_d_keybind, "movewindow d", True)
+print_action("Move window up", movewindow_u_keybind, "movewindow u", True)
+print_action("Move window right", movewindow_r_keybind, "movewindow r", True)
 
 ## workspace related entries goes here
 
@@ -605,6 +614,7 @@ for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
         "Switch to workspace " + current_workspace["name"],
         current_workspace["switchtokeybind"],
         "workspace " + str(current_workspace["id"]),
+        True,
     )
 
 for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
@@ -612,6 +622,7 @@ for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
         "Move to workspace " + current_workspace["name"],
         current_workspace["movetosilentkeybind"],
         "workspace " + str(current_workspace["id"]),
+        True,
     )
 
 print_custom_binds(bindds_bottom)
