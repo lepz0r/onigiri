@@ -1,3 +1,2 @@
-onigiri.json
-conf/onigiri.conf
-colorschemes/default.conf
+hyprland.conf.d/*
+!hyprland.conf.d/put-your-config-here.conf
