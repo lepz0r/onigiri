@@ -1,4 +1,5 @@
 #!/bin/sh
+
 binding_file="$(dirname "$0")/../hyprland.conf.d/10-keybinding.conf"
 autoexec_file="$(dirname "$0")/../autoexec.conf"
 hyprland_reload=0
@@ -12,8 +13,8 @@ fi
 if [ ! -e "$autoexec_file" ]
 then
 echo "exec-once=waybar" > "$autoexec_file"
-echo "exec-once=swaync" > "$autoexec_file"
-echo "exec-once=hypridle" > "$autoexec_file"
+echo "exec-once=swaync" >> "$autoexec_file"
+echo "exec-once=hypridle" >> "$autoexec_file"
 hyprland_reload=1
 fi
 
