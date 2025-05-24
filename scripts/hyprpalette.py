@@ -1,5 +1,14 @@
 import json
 import subprocess
+import argparse
+
+### Parse arguments
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--command-file", type=str, help="External command file")
+args = parser.parse_args()
+
+### Get Hyprland's config
 
 get_layout_option = subprocess.run(
     ["hyprctl", "-j", "getoptions", "general:layout"], capture_output=True, text=True
@@ -483,6 +492,32 @@ for current_workspace in workspaces:
 
     current_workspace["switchtokeybind"] = switch_to_keybind
     current_workspace["movetosilentkeybind"] = move_to_silent_keybind
+
+### Add commands from file
+try:
+    if args.command_file:
+        file = open(args.command_file)
+        ext_command = json.loads(file.read())
+        for current_command in ext_command:
+            keys = ["position", "before", "after", "key"]
+            for current_key in keys:
+                try:
+                    test_key = current_command[current_key]
+                except KeyError:
+                    current_command[current_key] = ""
+            # current_command["position"] = ""
+            # current_command["before"] = ""
+            # current_command["after"] = ""
+            #
+            try:
+                test_key = current_command["modmask"]
+            except KeyError:
+                current_command["modmask"] = 0
+            # current_command["key"] = ""
+            bindds.append(current_command)
+except FileNotFoundError:
+    pass
+
 
 ### Filter
 

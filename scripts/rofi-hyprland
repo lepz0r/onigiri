@@ -8,4 +8,4 @@ fi
 
 echo -en "\0prompt\x1f  \n" 
 echo -en "\0markup-rows\x1ftrue\n"
-python $(dirname "$0")/hyprpalette.py
+eval python $(dirname "$0")/hyprpalette.py $@

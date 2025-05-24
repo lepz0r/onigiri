@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+workspaces=$(hyprctl -j workspaces | jq '.[] | .id' | sort)
+keybinds_json=$(hyprctl -j binds)
+
+convert_keycode () {
+  case "$1" in
+    "1")
+      echo "Shift-"
+      ;;
+    "4")
+      echo "Ctrl-"
+      ;;
+    "8")
+      echo "Alt-"
+      ;;
+    "64")
+      echo "Super-"
+      ;;
+    "65")
+      echo "Super-Shift-"
+      ;;
+    "68")
+      echo "Super-Ctrl-"
+      ;;
+    "72")
+      echo "Super-Alt-"
+      ;;
+  esac
+}
+
+current_keybinds_json=$(echo $keybinds_json | jq '.[] | select(.dispatcher=="exec") | select(.arg=="hyprctl reload")')
+mod=$(convert_keycode $(echo [$current_keybinds_json] | jq '.[] | .modmask' ))
+key=$(echo [$current_keybinds_json] | jq -r '.[] | .key' )
+current_keybinds=$mod$key
+echo "label=Reload Hyprland config;exec=hyprctl reload;sub=$current_keybinds"
+
+for i in $(echo "$workspaces"); do
+  current_keybinds_json=$(echo $keybinds_json | jq '.[] | select(.dispatcher=="workspace") | select(.arg=='\"$i\"')')
+  mod=$(convert_keycode $(echo [$current_keybinds_json] | jq '.[] | .modmask' ))
+  key=$(echo [$current_keybinds_json] | jq -r '.[] | .key' )
+  current_keybinds=$mod$key
+  echo "label=Switch to workspace $i;exec=hyprctl dispatch workspace $i;sub=$current_keybinds"
+done
