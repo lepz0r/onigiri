@@ -196,6 +196,8 @@ pseudo_keybind = ""
 togglesplit_keybind = ""
 next_workspace_keybind = ""
 prev_workspace_keybind = ""
+forcekillactive_keybind = ""
+forcerendererreload_keybind = ""
 
 orientationcycle_keybind = ""
 addmaster_keybind = ""
@@ -432,18 +434,30 @@ for current_keybind in keybinds:
                     )
             case "workspace":
                 match current_keybind["arg"]:
-                    case "+":
+                    case "+1":
                         next_workspace_keybind = add_keybind(
                             next_workspace_keybind,
                             current_keybind["modmask"],
                             current_keybind["key"],
                         )
-                    case "-":
+                    case "-1":
                         prev_workspace_keybind = add_keybind(
                             prev_workspace_keybind,
                             current_keybind["modmask"],
                             current_keybind["key"],
                         )
+            case "forcekillactive":
+                forcekillactive_keybind = add_keybind(
+                    forcekillactive_keybind,
+                    current_keybind["modmask"],
+                    current_keybind["key"],
+                )
+            case "forcerendererreload":
+                forcerendererreload_keybind = add_keybind(
+                    forcerendererreload_keybind,
+                    current_keybind["modmask"],
+                    current_keybind["key"],
+                )
     else:
         description = current_keybind["description"]
         description_part = description.split("␀")
@@ -552,15 +566,27 @@ for current_keybind in bindds:
 ## Print custom keybindings that has description
 print_custom_binds(bindds_top)
 
-print_action("Close active window", killactive_keybind, "killactive", True)
-
-print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
+print_action("Maximize/restore active window", maximize_keybind, "fullscreen 1", True)
 
 print_action(
     "Toggle active window fullscreen", fullscreen_keybind, "fullscreen 0", True
 )
 
+print_action("Close active window", killactive_keybind, "killactive", True)
+
+print_action("Move window left", movewindow_l_keybind, "movewindow l", True)
+print_action("Move window down", movewindow_d_keybind, "movewindow d", True)
+print_action("Move window up", movewindow_u_keybind, "movewindow u", True)
+print_action("Move window right", movewindow_r_keybind, "movewindow r", True)
+
 # Workspace related entries goes here
+
+print_action(
+    "Switch to previous workspace", prev_workspace_keybind, "workspace -1", True
+)
+
+print_action("Switch to next workspace", next_workspace_keybind, "workspace +1", True)
+
 
 for current_workspace in sorted(workspaces, key=lambda x: x["name"]):
     print_action(
@@ -671,10 +697,10 @@ if layout == "master":
         True,
     )
 
-print_action("Move window left", movewindow_l_keybind, "movewindow l", True)
-print_action("Move window down", movewindow_d_keybind, "movewindow d", True)
-print_action("Move window up", movewindow_u_keybind, "movewindow u", True)
-print_action("Move window right", movewindow_r_keybind, "movewindow r", True)
+print_action("Kill active window", forcekillactive_keybind, "forcekillactive", True)
 
+print_action(
+    "Force renderer reload", forcerendererreload_keybind, "forcerendererreload", True
+)
 
 print_custom_binds(bindds_bottom)
