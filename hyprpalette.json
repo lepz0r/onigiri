@@ -1,7 +1,8 @@
 [
   {
-    "description": "Connect WiFi",
+    "description": "Connect to WiFi access point",
     "dispatcher": "exec",
-    "arg": "rofi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\""
+    "arg": "rofi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\"",
+    "after": "fullscreen 0"
   }
 ]
