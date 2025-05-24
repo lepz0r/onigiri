@@ -61,6 +61,8 @@ def replace_key(key):
             key = ""
         case "right":
             key = ""
+        case "Print":
+            key = "Printscreen"
 
     return key
 
@@ -86,7 +88,7 @@ def generate_keybind(modmask, key):
                     keybind = combiner(keybind, "Super", 1)
                 case 7:
                     keybind = combiner(keybind, "Scroll Lock", 1)
-    return keybind + "-" + replace_key(key).capitalize()
+            return keybind + "-" + replace_key(key).capitalize()
 
 
 def add_keybind(current_keybind, modmask, key):
@@ -94,6 +96,7 @@ def add_keybind(current_keybind, modmask, key):
         keybind = generate_keybind(modmask, key)
         output_keybind = combiner(current_keybind, keybind, 0)
     else:
+        key = replace_key(key)
         output_keybind = combiner(current_keybind, key, 0)
     return output_keybind
 
