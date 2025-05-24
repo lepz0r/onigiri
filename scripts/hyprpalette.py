@@ -88,7 +88,7 @@ def generate_keybind(modmask, key):
                     keybind = combiner(keybind, "Super", 1)
                 case 7:
                     keybind = combiner(keybind, "Scroll Lock", 1)
-            return keybind + "-" + replace_key(key).capitalize()
+    return keybind + "-" + replace_key(key).capitalize()
 
 
 def add_keybind(current_keybind, modmask, key):
