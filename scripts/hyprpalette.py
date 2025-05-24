@@ -104,6 +104,7 @@ def add_keybind(current_keybind, modmask, key):
 def print_custom_binds(list):
     list_index = 0
     dupes = []
+    list = sorted(list, key=lambda x: str(x["priority"]))
     while list_index < len(list):
         if list_index not in dupes:
             current_keybind = list[list_index]
@@ -458,6 +459,7 @@ for current_keybind in keybinds:
             "position": "",
             "before": "",
             "after": "",
+            "priority": "zzzzz",
         }
 
         if len(description_part) > 1:
@@ -508,14 +510,17 @@ try:
                     test_key = current_command[current_key]
                 except KeyError:
                     current_command[current_key] = ""
-            # current_command["position"] = ""
-            # current_command["before"] = ""
-            # current_command["after"] = ""
-            #
+
             try:
                 test_key = current_command["modmask"]
             except KeyError:
                 current_command["modmask"] = 0
+
+            try:
+                test_key = current_command["priority"]
+            except KeyError:
+                current_command["priority"] = "zzzzz"
+
             # current_command["key"] = ""
             bindds.append(current_command)
 except FileNotFoundError:
