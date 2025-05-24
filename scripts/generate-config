@@ -16,6 +16,9 @@ echo "exec-once=waybar" > "$autoexec_file"
 echo "exec-once=swaync" >> "$autoexec_file"
 echo "exec-once=hypridle" >> "$autoexec_file"
 hyprland_reload=1
+waybar & disown
+swaync & disown
+hypridle & disown
 fi
 
 if [ $hyprland_reload -eq 1 ]
