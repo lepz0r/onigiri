@@ -9,7 +9,11 @@ choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Power menu ")
 # Handle the choice
 case "$choice" in
     "Logout/Exit Hyprland")
-        hyprctl dispatch exit
+        if [[  -v $UWSM_WAIT_VARNAMES ]]; then
+          uwsm stop
+        else
+          hyprctl dispatch exit
+        fi 
         ;;
     "Power off")
         dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 "org.freedesktop.login1.Manager.PowerOff" boolean:true
