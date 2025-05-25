@@ -25,3 +25,6 @@ systemd-logind/elogind (Currently power actions only support logind) \
 mkdir ~/.config
 git clone --recursive https://gitlab.com/lepz0r/onigiri ~/.config/hypr
 ```
+
+## Credits:
+Default wallpaper: [Blue Night](https://stocksnap.io/photo/blue-night-DBUU6N5YUY) by [Free Nature Stock](https://stocksnap.io/author/freenaturestock) ([CC0](https://creativecommons.org/publicdomain/zero/1.0/))
