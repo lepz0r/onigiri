@@ -8,6 +8,7 @@ if [ ! -e "$binding_file" ]
 then
 echo "source = ../conf/dwindle.conf" > "$binding_file"
 hyprland_reload=1
+hyprctl notify 1 15000 "rgb(c4a7e7)" "fontsize:18 Setting up Onigiri..."
 fi
 
 if [ ! -e "$autoexec_file" ]
@@ -16,12 +17,28 @@ echo "exec-once=waybar" > "$autoexec_file"
 echo "exec-once=swaync" >> "$autoexec_file"
 echo "exec-once=hypridle" >> "$autoexec_file"
 hyprland_reload=1
-waybar & disown
-swaync & disown
 hypridle & disown
 fi
 
+if [ ! -d ~/.config/waybar ]
+then
+  git clone --recursive https://gitlab.com/lepz0r/owlphin ~/.config/waybar
+  waybar & disown
+fi
+
+if [ ! -d ~/.config/rofi ]
+then
+  git clone https://gitlab.com/lepz0r/rotting-orchad ~/.config/rofi
+fi
+
+if [ ! -d ~/.config/swaync ]
+then
+  git clone https://gitlab.com/lepz0r/eldritch-idol ~/.config/swaync
+  swaync & disown
+fi
+
+
 if [ $hyprland_reload -eq 1 ]
 then
-hyprctl reload
+  hyprctl reload
 fi
