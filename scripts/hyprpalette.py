@@ -63,6 +63,32 @@ def replace_key(key):
             key = ""
         case "Print":
             key = "Printscreen"
+        case "Comma":
+            key = ","
+        case "Period":
+            key = "."
+        case "apostrophe":
+            key = "'"
+        case "XF86AudioRaiseVolume":
+            key = "󰝝"
+        case "XF86AudioLowerVolume":
+            key = "󰝞"
+        case "XF86AudioMute":
+            key = "󰝟"
+        case "XF86AudioPlay":
+            key = "󰐎"
+        case "XF86AudioNext":
+            key = "󰒭"
+        case "XF86AudioPrev":
+            key = "󰒮"
+        case "XF86AudioMicMute":
+            key = "󰒮"
+        case "XF86MonBrightnesUp":
+            key = "󰃞󰐕"
+        case "XF86MonBrightnessDown":
+            key = "󰃞󰍴"
+        case "XF86WLAN":
+            key = ""
 
     return key
 
