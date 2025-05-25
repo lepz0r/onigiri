@@ -8,6 +8,7 @@ Just another Hyprland config
 [Hyprland](https://hyprland.org/)\
 [Waybar](https://github.com/Alexays/Waybar/)\
 [rofi (lbonn's Wayland fork)](https://github.com/lbonn/rofi)\
+[Hyprpaper](https://github.com/hyprwm/hyprpaper)\
 [Bash](https://www.gnu.org/software/bash/)\
 [Git](https://git-scm.com/)
 
