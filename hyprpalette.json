@@ -4,5 +4,11 @@
     "dispatcher": "exec",
     "arg": "rofi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\"",
     "after": "killactive"
+  },
+  {
+    "description": "Change Hyprland color scheme",
+    "dispatcher": "exec",
+    "arg": "sh -c \"ROFI_INFO=\"\" rofi -show hyprland_col -modi \"hyprland_col:$HOME/.config/hypr/scripts/rofi-change-colorscheme\"\"",
+    "after": "killactive"
   }
 ]
