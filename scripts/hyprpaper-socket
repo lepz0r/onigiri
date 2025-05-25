@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+success=0
+
+while [ $success -eq 0 ]; do
+  if [ -e "$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.hyprpaper.sock" ]; then
+    hyprctl hyprpaper $@
+    success=1
+  fi
+done

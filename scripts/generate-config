@@ -32,8 +32,8 @@ fi
 
 if [ ! -e "$wallpaper_config" ]
 then
-  echo '$wallpaper = ~/.config/hypr/wallpapers/StockSnap_DBUU6N5YUY.jpg' > "$wallpaper_config"
-  echo 'exec = sleep 0.2 && hyprctl hyprpaper preload $wallpaper && hyprctl hyprpaper wallpaper ,$wallpaper' >> "$wallpaper_config"
+  echo '$wallpaper = $confDir/wallpapers/StockSnap_DBUU6N5YUY.jpg' > "$wallpaper_config"
+  echo 'exec = $confDir/scripts/hyprpaper-socket preload $wallpaper && hyprctl hyprpaper wallpaper ,$wallpaper' >> "$wallpaper_config"
   hyprland_reload=1
   hyprpaper -c /dev/null & disown
   sleep 0.2
