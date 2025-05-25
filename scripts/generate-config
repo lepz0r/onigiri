@@ -25,7 +25,7 @@ if [ ! -e "$autoexec_file" ]
 then
   echo "exec-once=waybar" > "$autoexec_file"
   echo "exec-once=swaync" >> "$autoexec_file"
-  echo "exec-once=hyprpaper -c /dev/null >> "$autoexec_file"
+  echo "exec-once=hyprpaper -c /dev/null" >> "$autoexec_file"
   hyprland_reload=1
   hypridle & disown
 fi
