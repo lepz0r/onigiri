@@ -14,7 +14,7 @@ then
 fi
 
 IFS=$'\n'
-wallpapers=($(ls -1f $wallpaper_dir/* | xargs -n1 basename))
+wallpapers=($(ls -1fb $wallpaper_dir/* | xargs -n1 basename))
 
 echo -en "\0prompt\x1fChange wallpaper  \n" 
 echo -en "\0markup-rows\x1ftrue\n"
