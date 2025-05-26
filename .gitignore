@@ -1,4 +1,6 @@
 hyprland.conf.d/*
 !hyprland.conf.d/put-your-config-here.conf
+wallpapers/*
+!wallpapers/StockSnap_DBUU6N5YUY.jpg
 hyprpaper.conf
 autoexec.conf
