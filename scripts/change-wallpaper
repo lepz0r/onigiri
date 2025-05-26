@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+wallpaper_dir="$(dirname "$0")/../wallpapers"
+
+if [ "$ROFI_INFO" != "" ];
+then
+    wallpaper_conf="$(dirname "$0")/../hyprland.conf.d/10-wallpaper.conf"
+    wallpaper_realpath="$(realpath "$(dirname "$0")/../wallpapers/$ROFI_INFO")"
+    echo '$wallpaper = '"$wallpaper_realpath" > "$wallpaper_conf"
+    echo "exec-once = hyprpaper -c /dev/null" >> "$wallpaper_conf"
+    echo 'exec = $confDir/scripts/hyprpaper-socket preload $wallpaper && hyprctl hyprpaper wallpaper ,$wallpaper' >> "$wallpaper_conf"
+    coproc (hyprctl reload > /dev/null)
+    exit 0
+fi
+
+IFS=$'\n'
+wallpapers=($(ls -1f $wallpaper_dir/* | xargs -n1 basename))
+
+echo -en "\0prompt\x1fChange wallpaper  \n" 
+echo -en "\0markup-rows\x1ftrue\n"
+
+for wallpaper in "${wallpapers[@]}"
+do 
+  echo -en "$wallpaper\0info\x1f$wallpaper\x1ficon\x1f$wallpaper_dir/$wallpaper\n"
+done
+
+
