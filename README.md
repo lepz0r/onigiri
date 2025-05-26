@@ -10,9 +10,8 @@ Just another Hyprland config
 [rofi (lbonn's Wayland fork)](https://github.com/lbonn/rofi)\
 [Hyprpaper](https://github.com/hyprwm/hyprpaper)\
 [Bash](https://www.gnu.org/software/bash/)\
-[Git](https://git-scm.com/)
-
-#### Optional
+[Git](https://git-scm.com/)\
+[Zenity](https://gitlab.gnome.org/GNOME/zenity) \
 [foot](https://codeberg.org/dnkl/foot) (Used as default terminal) \
 systemd-logind/elogind (Currently power actions only support logind) \
 [PipeWire](https://pipewire.org/) & [WirePlumber](https://pipewire.pages.freedesktop.org/wireplumber/) (Currently volume control only support PipeWire & WirePlumber) \
