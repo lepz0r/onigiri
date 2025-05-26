@@ -2,7 +2,7 @@
 
 if [ "$ROFI_INFO" != "" ];
 then
-    echo "source = ../colorschemes/$ROFI_INFO.conf" > ~/.config/hypr/hyprland.conf.d/10-colorscheme.conf
+    echo "source = ../colorschemes/$ROFI_INFO.conf" > $(dirname "$0")/../hyprland.conf.d/10-colorscheme.conf
     coproc (hyprctl reload > /dev/null)
     exit 0
 fi
@@ -10,7 +10,7 @@ fi
 IFS=$'\n'
 colorscheme_list=($(ls -1f $(dirname "$0")/../colorschemes/*.conf | xargs -n1 basename -s .conf ))
 
-echo -en "\0prompt\x1f  \n" 
+echo -en "\0prompt\x1fChange color scheme  \n" 
 echo -en "\0markup-rows\x1ftrue\n"
 
 for colorscheme in "${colorscheme_list[@]}"
