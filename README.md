@@ -1,6 +1,8 @@
 # Onigiri
 Just another Hyprland config
 
+![Preview](preview.png)
+
 ## Installation
 
 ### Prerequisites
