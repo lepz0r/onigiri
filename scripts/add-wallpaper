@@ -1,0 +1,5 @@
+#!/bin/sh
+
+wallpaper_file="$(zenity --file-selection --file-filter='*.jpg *.jpeg *.png *.webp *.jxl *.bmp')"
+
+ln -s "$wallpaper_file" $(dirname "$0")/../wallpapers

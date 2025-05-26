@@ -2,15 +2,21 @@
 
 wallpaper_dir="$(dirname "$0")/../wallpapers"
 
-if [ "$ROFI_INFO" != "" ];
-then
+if [ "$ROFI_INFO" != "" ]; then
+  wallpaper_realpath="$(realpath "$(dirname "$0")/../wallpapers/$ROFI_INFO")"
+  if [ -e "$wallpaper_realpath" ]; then
     wallpaper_conf="$(dirname "$0")/../hyprland.conf.d/10-wallpaper.conf"
-    wallpaper_realpath="$(realpath "$(dirname "$0")/../wallpapers/$ROFI_INFO")"
-    echo '$wallpaper = '"$wallpaper_realpath" > "$wallpaper_conf"
     echo "exec-once = hyprpaper -c /dev/null" >> "$wallpaper_conf"
+    echo '$wallpaper = '"$wallpaper_realpath" > "$wallpaper_conf"
     echo 'exec = $confDir/scripts/hyprpaper-socket preload $wallpaper && hyprctl hyprpaper wallpaper ,$wallpaper' >> "$wallpaper_conf"
     coproc (hyprctl reload > /dev/null)
     exit 0
+  else
+    if [ "$ROFI_INFO" == "add_wallpaper" ]; then
+      coproc ( $(dirname "$0")/add-wallpaper > /dev/null )
+      exit 0
+    fi
+  fi
 fi
 
 IFS=$'\n'
@@ -23,5 +29,4 @@ for wallpaper in "${wallpapers[@]}"
 do 
   echo -en "$wallpaper\0info\x1f$wallpaper\x1ficon\x1f$wallpaper_dir/$wallpaper\n"
 done
-
-
+  echo -en "Add wallpaper\0info\x1fadd_wallpaper\x1ficon\x1flist-add\n" 
