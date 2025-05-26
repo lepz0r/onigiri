@@ -16,7 +16,8 @@ fi
 
 if [ ! -e "$colorscheme_file" ]
 then
-echo "source = ../colorschemes/catppuccin-frappe.conf" > "$colorscheme_file"
+export ROFI_INFO=catppuccin-frappe
+$(dirname "$0")/rofi-change-colorscheme
 hyprland_reload=1
 fi
 
