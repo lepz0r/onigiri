@@ -23,9 +23,14 @@ get_workspaces = subprocess.run(
     ["hyprctl", "-j", "workspaces"], capture_output=True, text=True
 )
 
+get_active_window = subprocess.run(
+    ["hyprctl", "-j", "activewindow"], capture_output=True, text=True
+)
+
 layout_option = json.loads(get_layout_option.stdout)
 keybinds = json.loads(get_keybinds.stdout)
 workspaces = json.loads(get_workspaces.stdout)
+active_window = json.loads(get_active_window.stdout)
 layout = layout_option["str"]
 
 bindds = []
@@ -592,7 +597,10 @@ for current_keybind in bindds:
 ## Print custom keybindings that has description
 print_custom_binds(bindds_top)
 
-print_action("Maximize/restore active window", maximize_keybind, "fullscreen 1", True)
+if active_window["fullscreen"] == 1:
+    print_action("Restore active window", maximize_keybind, "fullscreen 1", True)
+else:
+    print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
 
 print_action(
     "Toggle active window fullscreen", fullscreen_keybind, "fullscreen 0", True
@@ -691,8 +699,10 @@ print_action(
     True,
 )
 
-
-print_action("Pin active window", pin_keybind, "pin", True)
+if active_window["pinned"]:
+    print_action("Unpin active window", pin_keybind, "pin", True)
+else:
+    print_action("Pin active window", pin_keybind, "pin", True)
 
 if layout == "master":
     print_action(
