@@ -597,9 +597,12 @@ for current_keybind in bindds:
 ## Print custom keybindings that has description
 print_custom_binds(bindds_top)
 
-if active_window["fullscreen"] == 1:
-    print_action("Restore active window", maximize_keybind, "fullscreen 1", True)
-else:
+try:
+    if active_window["fullscreen"] == 1:
+        print_action("Restore active window", maximize_keybind, "fullscreen 1", True)
+    else:
+        print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
+except KeyError:
     print_action("Maximize active window", maximize_keybind, "fullscreen 1", True)
 
 print_action(
@@ -699,9 +702,12 @@ print_action(
     True,
 )
 
-if active_window["pinned"]:
-    print_action("Unpin active window", pin_keybind, "pin", True)
-else:
+try:
+    if active_window["pinned"]:
+        print_action("Unpin active window", pin_keybind, "pin", True)
+    else:
+        print_action("Pin active window", pin_keybind, "pin", True)
+except KeyError:
     print_action("Pin active window", pin_keybind, "pin", True)
 
 if layout == "master":
