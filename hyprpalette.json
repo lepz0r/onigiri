@@ -16,5 +16,11 @@
     "dispatcher": "exec",
     "arg": "sh -c \"ROFI_INFO=\"\" rofi -theme-str 'listview{lines: 4; columns: 4; cycle:true; fixed-columns:true; orientation:horizontal;padding:0%;} element{orientation:vertical;} element-icon{size: 128px; spacing:0%;}' -show wallpaper -modi \"wallpaper:$HOME/.config/hypr/scripts/change-wallpaper\" \"",
     "after": "killactive"
+  },
+  {
+    "description": "Change GTK 3 theme",
+    "dispatcher": "exec",
+    "arg": "~/.config/hypr/scripts/change-gtk-theme.py",
+    "after": "killactive"
   }
 ]
