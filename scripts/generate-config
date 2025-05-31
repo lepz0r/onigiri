@@ -58,7 +58,7 @@ fi
 
 if [ ! -e "$(dirname "$0")/../.dont_show_welcome" ]; then
   notify=$(notify-send "Welcome to Onigiri" "Press Super-Shift-P to open command palette" -A "Don't show again" -wt 10000)
-  if [ "$notify" == "0" ]; then
+  if [ "$notify" = "0" ]; then
     touch $(dirname "$0")/../.dont_show_welcome
   fi
 fi
