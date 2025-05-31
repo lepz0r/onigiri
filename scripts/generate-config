@@ -7,23 +7,20 @@ wallpaper_config="$(dirname "$0")/../hyprland.conf.d/10-wallpaper.conf"
 default_wallpaper="$(dirname "$0")/../wallpapers/StockSnap_DBUU6N5YUY.jpg"
 hyprland_reload=0
 
-if [ ! -e "$binding_file" ]
-then
+if [ ! -e "$binding_file" ]; then
 echo "source = ../conf/dwindle.conf" > "$binding_file"
 hyprland_reload=1
 hyprctl notify 1 15000 "rgb(c4a7e7)" "fontsize:18 Setting up Onigiri..."
 fi
 
-if [ ! -e "$colorscheme_file" ]
-then
+if [ ! -e "$colorscheme_file" ]; then
 export ROFI_INFO=catppuccin-frappe
 $(dirname "$0")/rofi-change-colorscheme
 hyprland_reload=1
 fi
 
 
-if [ ! -e "$autoexec_file" ]
-then
+if [ ! -e "$autoexec_file" ]; then
   echo "exec-once=waybar" > "$autoexec_file"
   echo "exec-once=swaync" >> "$autoexec_file"
   echo "exec-once=hyprpaper -c /dev/null" >> "$autoexec_file"
@@ -31,8 +28,7 @@ then
   hypridle & disown
 fi
 
-if [ ! -e "$wallpaper_config" ]
-then
+if [ ! -e "$wallpaper_config" ]; then
   echo '$wallpaper = $confDir/wallpapers/StockSnap_DBUU6N5YUY.jpg' > "$wallpaper_config"
   echo 'exec = $confDir/scripts/hyprpaper-socket preload $wallpaper && hyprctl hyprpaper wallpaper ,$wallpaper' >> "$wallpaper_config"
   hyprland_reload=1
@@ -42,24 +38,27 @@ then
   hyprctl hyprpaper wallpaper ,$default_wallpaper
 fi
 
-if [ ! -d ~/.config/waybar ]
-then
+if [ ! -d ~/.config/waybar ]; then
   git clone --recursive https://gitlab.com/lepz0r/owlphin ~/.config/waybar
   waybar & disown
 fi
 
-if [ ! -d ~/.config/rofi ]
-then
+if [ ! -d ~/.config/rofi ]; then
   git clone https://gitlab.com/lepz0r/rotting-orchad ~/.config/rofi
 fi
 
-if [ ! -d ~/.config/swaync ]
-then
+if [ ! -d ~/.config/swaync ]; then
   git clone https://gitlab.com/lepz0r/eldritch-idol ~/.config/swaync
   swaync & disown
 fi
 
-if [ $hyprland_reload -eq 1 ]
-then
+if [ $hyprland_reload -eq 1 ]; then
   hyprctl reload
+fi
+
+if [ ! -e "$(dirname "$0")/../.dont_show_welcome" ]; then
+  notify=$(notify-send "Welcome to Onigiri" "Press Super-Shift-P to open command palette" -A "Don't show again" -wt 10000)
+  if [ "$notify" == "0" ]; then
+    touch $(dirname "$0")/../.dont_show_welcome
+  fi
 fi
