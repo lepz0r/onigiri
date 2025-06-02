@@ -5,7 +5,8 @@ colorscheme_file="$(dirname "$0")/../hyprland.conf.d/10-colorscheme.conf"
 autoexec_file="$(dirname "$0")/../autoexec.conf"
 wallpaper_config="$(dirname "$0")/../hyprland.conf.d/10-wallpaper.conf"
 default_wallpaper="$(dirname "$0")/../wallpapers/StockSnap_DBUU6N5YUY.jpg"
-waybar_style="$(dirname "$0")/../waybar-style.css"
+waybar_style="$(dirname "$0")/../conf/waybar-style.css"
+waybar_userstyle="$(dirname "$0")/../waybar-userstyle.css"
 hyprland_reload=0
 
 if [ ! -e "$binding_file" ]; then
@@ -22,7 +23,7 @@ fi
 
 
 if [ ! -e "$autoexec_file" ]; then
-  echo 'exec-once=waybar -s $confDir/waybar-style.css' > "$autoexec_file"
+  echo 'exec-once=waybar -s $confDir/conf/waybar-style.css' > "$autoexec_file"
   echo "exec-once=swaync" >> "$autoexec_file"
   echo "exec-once=hyprpaper -c /dev/null" >> "$autoexec_file"
   hyprland_reload=1
@@ -41,7 +42,13 @@ fi
 
 if [ ! -d ~/.config/waybar ] || [ ! -e "$waybar_style" ] ; then
   git clone --recursive https://gitlab.com/lepz0r/owlphin ~/.config/waybar
-  echo '@import url("../waybar/style.css");' > "$waybar_style"
+  if [ ! -e "$waybar_style" ];then
+    echo '@import url("../../waybar/style.css");' > "$waybar_style"
+    echo '@import url("../waybar-userstyle.css");' >> "$waybar_style"
+  fi
+  if [ ! -e "$waybar_userstyle" ];then
+    touch "$waybar_userstyle"
+  fi
   waybar -s "$waybar_style" & disown
 fi
 

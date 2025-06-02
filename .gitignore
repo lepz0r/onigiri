@@ -4,4 +4,5 @@ wallpapers/*
 !wallpapers/StockSnap_DBUU6N5YUY.jpg
 hyprpaper.conf
 autoexec.conf
-waybar-style.css
+conf/waybar-style.css
+waybar-userstyle.css
