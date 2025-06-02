@@ -6,3 +6,4 @@ hyprpaper.conf
 autoexec.conf
 conf/waybar-style.css
 waybar-userstyle.css
+.dont_show_welcome
