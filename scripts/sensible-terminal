@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# This script is based on i3-sensible-terminal (https://github.com/i3/i3/blob/next/i3-sensible-terminal), adapted for notification service, swaynag & Hyprland's notification
+#
+# This script tries to exec a terminal emulator by trying some known terminal
+# emulators.
+
+dbus_send_found=0
+notfound_message='sensible-terminal could not find a terminal emulator. Please install one.'
+
+for terminal in "$TERMINAL" x-terminal-emulator gnome-terminal konsole foot kitty alacritty hyper wezterm ghostty roxterm termite terminology st qterminal lilyterm tilix terminix guake tilda rio xfce4-terminal terminator Eterm mate-terminal lxterminal termit uxterm xterm urxvt rxvt aterm ; do
+    if command -v "$terminal" > /dev/null 2>&1; then
+        exec "$terminal" "$@"
+    fi
+done
+
+
+if command -v "dbus-send" > /dev/null 2>&1;then
+  dbus_send_found=1
+fi
+
+if [ $dbus_send_found -eq 1 ] && command -v notify-send > /dev/null 2>&1 ;then
+  if dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
+    notify-send "sensible-terminal" "$notfound_message"
+  fi
+else
+  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE+x}" ];then
+    hyprctl notify 1 5000 "rgb(FF0000)" "$notfound_message"
+  elif command -v "swaynag" > /dev/null 2>&1;then
+    swaynag -m "$notfound_message"
+  else
+    notify-send 'sensible-terminal' 'sensible-terminal could not find a terminal emulator. Please install one.'
+  fi
+fi

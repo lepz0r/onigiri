@@ -14,7 +14,7 @@ Just another Hyprland config
 [Bash](https://www.gnu.org/software/bash/)\
 [Git](https://git-scm.com/)\
 [Zenity](https://gitlab.gnome.org/GNOME/zenity) \
-[foot](https://codeberg.org/dnkl/foot) (Used as default terminal) \
+Terminal emulator with Wayland support \
 systemd-logind/elogind (Currently power actions only support logind) \
 [PipeWire](https://pipewire.org/) & [WirePlumber](https://pipewire.pages.freedesktop.org/wireplumber/) (Currently volume control only support PipeWire & WirePlumber) \
 [playerctl](https://github.com/altdesktop/playerctl) (For media control) \
