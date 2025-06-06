@@ -10,7 +10,11 @@ notfound_message='sensible-terminal could not find a terminal emulator. Please i
 
 for terminal in "$TERMINAL" x-terminal-emulator gnome-terminal konsole foot kitty alacritty hyper wezterm ghostty roxterm termite terminology st qterminal lilyterm tilix terminix guake tilda rio xfce4-terminal terminator Eterm mate-terminal lxterminal termit uxterm xterm urxvt rxvt aterm ; do
     if command -v "$terminal" > /dev/null 2>&1; then
+      if [ -n "${UWSM_WAIT_VARNAMES+x}" ];then
+        exec uwsm app -- "$terminal" "$@"
+      else
         exec "$terminal" "$@"
+      fi
     fi
 done
 
