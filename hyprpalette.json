@@ -22,5 +22,11 @@
     "dispatcher": "exec",
     "arg": "~/.config/hypr/scripts/change-gtk-theme.py",
     "after": "killactive"
+  },
+  {
+    "description": "Change bar color scheme",
+    "dispatcher": "exec",
+    "arg": "~/.config/hypr/scripts/change-waybar-theme.py",
+    "after": "killactive"
   }
 ]
