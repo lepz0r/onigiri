@@ -26,11 +26,11 @@ fi
 
 if [ $dbus_send_found -eq 1 ] && command -v notify-send > /dev/null 2>&1 ;then
   if dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
-    notify-send "sensible-terminal" "$notfound_message"
+    notify-send -a "sensible-terminal" -i terminal "sensible-terminal" -u critical "$notfound_message"
   fi
 else
   if [ -n "${HYPRLAND_INSTANCE_SIGNATURE+x}" ];then
-    hyprctl notify 1 5000 "rgb(FF0000)" "$notfound_message"
+    hyprctl notify 3 5000 "rgb(FF0000)" "fontsize:14 $notfound_message"
   elif command -v "swaynag" > /dev/null 2>&1;then
     swaynag -m "$notfound_message"
   fi
