@@ -28,5 +28,11 @@
     "dispatcher": "exec",
     "arg": "~/.config/hypr/scripts/change-waybar-theme.py",
     "after": "killactive"
+  },
+  {
+    "description": "Change rofi color scheme",
+    "dispatcher": "exec",
+    "arg": "~/.config/hypr/scripts/change-rofi-theme.py",
+    "after": "killactive"
   }
 ]
