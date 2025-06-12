@@ -2,19 +2,19 @@
   {
     "description": "Connect to WiFi access point",
     "dispatcher": "exec",
-    "arg": "rofi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\"",
+    "arg": "rofi -theme $HOME/.config/hypr/conf/rofi-config.rasi -show wifi -modi \"wifi:$HOME/.config/hypr/scripts/rofi-wifi\"",
     "after": "killactive"
   },
   {
     "description": "Change Hyprland color scheme",
     "dispatcher": "exec",
-    "arg": "sh -c \"ROFI_INFO=\"\" rofi -show hyprland_col -modi \"hyprland_col:$HOME/.config/hypr/scripts/rofi-change-colorscheme\"\"",
+    "arg": "sh -c \"ROFI_INFO=\"\" rofi -theme $HOME/.config/hypr/conf/rofi-config.rasi -show hyprland_col -modi \"hyprland_col:$HOME/.config/hypr/scripts/rofi-change-colorscheme\"\"",
     "after": "killactive"
   },
   {
     "description": "Change wallpaper",
     "dispatcher": "exec",
-    "arg": "sh -c \"ROFI_INFO=\"\" rofi -theme-str 'listview{lines: 4; columns: 4; cycle:true; fixed-columns:true; orientation:horizontal;padding:0%;} element{orientation:vertical;} element-icon{size: 128px; spacing:0%;}' -show wallpaper -modi \"wallpaper:$HOME/.config/hypr/scripts/change-wallpaper\" \"",
+    "arg": "sh -c \"ROFI_INFO=\"\" rofi -theme $HOME/.config/hypr/conf/rofi-config.rasi -theme-str 'listview{lines: 4; columns: 4; cycle:true; fixed-columns:true; orientation:horizontal;padding:0%;} element{orientation:vertical;} element-icon{size: 128px; spacing:0%;}' -show wallpaper -modi \"wallpaper:$HOME/.config/hypr/scripts/change-wallpaper\" \"",
     "after": "killactive"
   },
   {

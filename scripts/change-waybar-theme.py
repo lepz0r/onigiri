@@ -42,7 +42,9 @@ rofi = subprocess.run(
     [
         "sh",
         "-c",
-        'echo "' + colorschemes_entry + '" | rofi -dmenu -p "Change bar color scheme "',
+        'echo "'
+        + colorschemes_entry
+        + '" | rofi -theme $HOME/.config/hypr/conf/rofi-config.rasi -dmenu -p "Change bar color scheme "',
     ],
     env=env,
     capture_output=True,

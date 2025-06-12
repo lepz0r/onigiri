@@ -39,7 +39,11 @@ for theme in themes:
 env["theme_entry"] = theme_entry
 
 rofi = subprocess.run(
-    ["sh", "-c", 'echo "$theme_entry" | rofi -dmenu -p "Change GTK 3 theme "'],
+    [
+        "sh",
+        "-c",
+        'echo "$theme_entry" | rofi -theme $HOME/.config/hypr/conf/rofi-config.rasi -dmenu -p "Change GTK 3 theme "',
+    ],
     env=env,
     capture_output=True,
     text=True,
