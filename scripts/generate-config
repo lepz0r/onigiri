@@ -7,6 +7,8 @@ wallpaper_config="$(dirname "$0")/../hyprland.conf.d/10-wallpaper.conf"
 default_wallpaper="$(dirname "$0")/../wallpapers/StockSnap_DBUU6N5YUY.jpg"
 waybar_style="$(dirname "$0")/../conf/waybar-style.css"
 waybar_userstyle="$(dirname "$0")/../waybar-userstyle.css"
+rofi_config="$(dirname "$0")/../conf/rofi-config.rasi"
+rofi_userconfig="$(dirname "$0")/../rofi-userconfig.rasi"
 hyprland_reload=0
 
 if [ ! -e "$binding_file" ]; then
@@ -70,4 +72,13 @@ if [ ! -e "$(dirname "$0")/../.dont_show_welcome" ]; then
   if [ "$notify" = "0" ]; then
     touch $(dirname "$0")/../.dont_show_welcome
   fi
+fi
+
+if [ ! -e "$rofi_config" ]; then
+  echo '@import "~/.config/rofi/config.rasi"' > "$rofi_config"
+  echo '@import "../rofi-userconfig.rasi"' >> "$rofi_config"
+fi
+
+if [ ! -e "rofi_userconfig" ]; then
+  touch "$rofi_userconfig"
 fi

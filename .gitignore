@@ -5,5 +5,7 @@ wallpapers/*
 hyprpaper.conf
 autoexec.conf
 conf/waybar-style.css
+conf/rofi-config.rasi
+rofi-userconfig.rasi
 waybar-userstyle.css
 .dont_show_welcome
