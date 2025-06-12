@@ -4,7 +4,7 @@
 options=("Logout/Exit Hyprland" "Suspend" "Power off" "Reboot")
 
 # Prompt the user using dmenu
-choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu -p "Power menu ")
+choice=$(printf '%s\n' "${options[@]}" | rofi -config $(dirname "$0")/../conf/rofi-config.rasi -dmenu -p "Power menu ")
 
 # Handle the choice
 case "$choice" in
