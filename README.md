@@ -1,5 +1,4 @@
 # Onigiri
-Just another Hyprland config
 
 ![Preview](preview.png)
 
@@ -22,6 +21,15 @@ systemd-logind/elogind (Currently power actions only support logind) \
 [slurp](https://github.com/emersion/slurp) (For taking screenshot of a region) \
 [Monaspice Nerd Font](https://www.nerdfonts.com/)
 
+#### Prerequisites installation commands
+<details><summary>Arch Linux (with Ghostty terminal)</summary>
+
+  ``` 
+  # pacman -S hyprland waybar rofi-wayland hyprpaper git zenity ghostty pipewire wireplumber playerctl grim slurp otf-monaspace-nerd
+```
+
+</details>
+
 ### Installation
 ```
 mkdir ~/.config
@@ -30,3 +38,25 @@ git clone --recursive https://gitlab.com/lepz0r/onigiri ~/.config/hypr
 
 ## Credits:
 Default wallpaper: [Blue Night](https://stocksnap.io/photo/blue-night-DBUU6N5YUY) by [Free Nature Stock](https://stocksnap.io/author/freenaturestock) ([CC0](https://creativecommons.org/publicdomain/zero/1.0/))
+
+### Configuration
+Some settings can be configured through command palette (Super-Shift-P)
+#### Hyprland
+To add Hyprland configuration, put your additional configuration into a file in `~/.config/hypr/hyprland.conf.d/` 
+<details><summary>Additional configuration example</summary>
+
+```
+# Change default terminal, by default use sensible-terminal script bundled with this dotfiles.
+$terminal = alacritty
+
+# Disable hardware cursors for NVIDIA GPU
+cursor {
+  no_hardware_cursors=false 
+}
+
+# Change cursor name & size 
+$cursorName = catppuccin-macchiato-light-cursors
+$cursorSize = 24
+```
+
+</details>
