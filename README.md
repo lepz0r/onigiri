@@ -9,6 +9,7 @@
 [Hyprland](https://hyprland.org/)\
 [Waybar](https://github.com/Alexays/Waybar/)\
 [rofi (lbonn's Wayland fork)](https://github.com/lbonn/rofi)\
+[SwayNotificationCenter](https://github.com/ErikReider/SwayNotificationCenter)\
 [Hyprpaper](https://github.com/hyprwm/hyprpaper)\
 [Bash](https://www.gnu.org/software/bash/)\
 [Git](https://git-scm.com/)\
@@ -21,13 +22,31 @@ systemd-logind/elogind (Currently power actions only support logind) \
 [slurp](https://github.com/emersion/slurp) (For taking screenshot of a region) \
 [Monaspice Nerd Font](https://www.nerdfonts.com/)
 
-#### Prerequisites installation commands
+#### Prerequisites installation
 <details><summary>Arch Linux (with Ghostty terminal)</summary>
 
   ``` 
-  # pacman -S hyprland waybar rofi-wayland hyprpaper git zenity ghostty pipewire wireplumber playerctl grim slurp otf-monaspace-nerd
+  # pacman -S hyprland waybar rofi-wayland swaync hyprpaper git zenity ghostty pipewire wireplumber playerctl grim slurp otf-monaspace-nerd
 ```
 
+</details>
+
+<details><summary>Ubuntu</summary>
+Add Hyprland PPA for 24.04 & earlier
+
+```
+sudo add-apt-repository ppa:cppiber/hyprland
+```
+
+Add Ubuntu Sway Remix PPA for Rofi (Wayland fork)
+```
+sudo add-apt-repository ppa:ubuntusway-dev/stable
+```
+
+Install prerequisites (with kitty terminal)
+```
+sudo apt install hyprland waybar sway-notificaton-center rofi-wayland hyprpaper git zenity kitty playerctl grim slurp python3-psutil
+```
 </details>
 
 ### Installation
