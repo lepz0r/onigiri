@@ -47,6 +47,15 @@ Install prerequisites (with kitty terminal)
 ```
 sudo apt install hyprland waybar sway-notificaton-center rofi-wayland hyprpaper git zenity kitty playerctl grim slurp python3-psutil
 ```
+
+Install fonts
+```
+mkdir ~/.fonts
+cd ~/.fonts
+curl -LO "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Monaspace.zip"
+unzip Monaspace.zip
+rm Monaspace.zip
+```
 </details>
 
 ### Installation
