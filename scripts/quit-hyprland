@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Define the options
 options=("Logout/Exit Hyprland" "Suspend" "Power off" "Reboot")
