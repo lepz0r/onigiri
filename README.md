@@ -32,7 +32,7 @@ systemd-logind/elogind (Currently power actions only support logind) \
 </details>
 
 <details><summary>Ubuntu</summary>
-Add Hyprland PPA for 24.04 & earlier
+Add Hyprland PPA
 
 ```
 sudo add-apt-repository ppa:cppiber/hyprland
