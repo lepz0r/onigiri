@@ -19,7 +19,7 @@ sensible_notifier() {
   fi
 
   if [ $use_notif_svc -eq 1 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
-    notify-send -a "sensible-terminal" -i terminal "sensible-terminal" -u critical "$1"
+    notify-send -a "$(basename $0)" -i terminal "$(basename $0)" -u critical "$1"
   elif [ $use_notif_svc -eq 2 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
     zenity --notification --text="$1"
   else
