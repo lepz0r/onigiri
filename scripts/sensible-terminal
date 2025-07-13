@@ -9,32 +9,40 @@
 use_notif_svc=0
 notfound_message='sensible-terminal could not find a terminal emulator. Please install one.'
 
-for terminal in "$TERMINAL" x-terminal-emulator konsole foot kitty alacritty hyper wezterm ghostty roxterm termite terminology qterminal station wayst gnome-terminal lilyterm tilix terminix guake tilda rio xfce4-terminal terminator cool-retro-term coreterminal contour Eterm deepin-terminal mate-terminal lxterminal termit st uxterm xterm urxvt rxvt aterm ; do
-    if command -v "$terminal" > /dev/null 2>&1; then
-      if [ -n "${UWSM_WAIT_VARNAMES+x}" ];then
+sensible_notifier() {
+  if command -v "dbus-send" >/dev/null 2>&1; then
+    if command -v notify-send >/dev/null 2>&1; then
+      use_notif_svc=1
+    elif command -v zenity >/dev/null; then
+      use_notif_svc=2
+    fi
+  fi
+
+  if [ $use_notif_svc -eq 1 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
+    notify-send -a "sensible-terminal" -i terminal "sensible-terminal" -u critical "$1"
+  elif [ $use_notif_svc -eq 2 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1; then
+    zenity --notification --text="$1"
+  else
+    if [ -n "${HYPRLAND_INSTANCE_SIGNATURE+x}" ]; then
+      hyprctl notify 3 5000 "rgb(FF0000)" "fontsize:14 $1"
+    elif command -v "swaynag" >/dev/null 2>&1; then
+      swaynag -m "$1"
+    fi
+  fi
+}
+
+if [ "$(basename $0)" = "sensible-notifier" ]; then
+  sensible_notifier "$1"
+else
+  for terminal in "$TERMINAL" x-terminal-emulator konsole foot kitty alacritty hyper wezterm ghostty roxterm termite terminology qterminal station wayst gnome-terminal lilyterm tilix terminix guake tilda rio xfce4-terminal terminator cool-retro-term coreterminal contour Eterm deepin-terminal mate-terminal lxterminal termit st uxterm xterm urxvt rxvt aterm; do
+    if command -v "$terminal" >/dev/null 2>&1; then
+      if [ -n "${UWSM_WAIT_VARNAMES+x}" ]; then
         exec uwsm app -- "$terminal" "$@"
       else
         exec "$terminal" "$@"
       fi
     fi
-done
+  done
 
-if command -v "dbus-send" > /dev/null 2>&1;then
-  if command -v notify-send > /dev/null 2>&1;then
-      use_notif_svc=1
-  elif command -v zenity > /dev/null;then 
-      use_notif_svc=2
-  fi
-fi
-
-if [ $use_notif_svc -eq 1 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1;then
-  notify-send -a "sensible-terminal" -i terminal "sensible-terminal" -u critical "$notfound_message"
-elif [ $use_notif_svc -eq 2 ] && dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner "string:org.freedesktop.Notifications" >/dev/null 2>&1;then
-  zenity --notification --text="$notfound_message"
-else
-  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE+x}" ];then
-    hyprctl notify 3 5000 "rgb(FF0000)" "fontsize:14 $notfound_message"
-  elif command -v "swaynag" > /dev/null 2>&1;then
-    swaynag -m "$notfound_message"
-  fi
+  sensible_notifier "$notfound_message"
 fi
