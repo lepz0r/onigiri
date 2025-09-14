@@ -22,6 +22,9 @@ systemd-logind/elogind (Currently power actions only support logind) \
 [slurp](https://github.com/emersion/slurp) (For taking screenshot of a region) \
 [Monaspice Nerd Font](https://www.nerdfonts.com/)
 
+##### Optional
+[gpu-screen-recorder](https://git.dec05eba.com/gpu-screen-recorder-ui) For screen recording
+
 #### Prerequisites installation
 <details><summary>Arch Linux (with Ghostty terminal)</summary>
 
