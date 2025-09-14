@@ -1,0 +1,14 @@
+#!/bin/sh
+
+HYPRLAND_RUNDIR="/run/user/1000/hypr/$HYPRLAND_INSTANCE_SIGNATURE"
+PIDFILE="$HYPRLAND_RUNDIR/gpu-screen-recorder.pid"
+
+if [ ! -e "$PIDFILE" ]; then
+  mkdir -p ~/Videos/Recordings
+  exec gpu-screen-recorder -w portal -o ~/Videos/Recordings/$(date +%Y-%m-%d_%H.%M.%S).mp4 2>&1 >"$HYPRLAND_RUNDIR/gpu-screen-recorder.log" &
+  echo $! >"$PIDFILE"
+else
+  PID=$(cat "$PIDFILE")
+  kill $PID
+  rm "$PIDFILE"
+fi
